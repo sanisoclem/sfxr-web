@@ -1,0 +1,15 @@
+{
+  "name": "sfxr-rs-app",
+  "version": "0.1.0",
+  "author": "Jerahmeel Cosinas<me@jerahmeelcosinas.net>",
+  "license": "MIT",
+  "devDependencies": {
+    "vite": "^2.8.0",
+    "vite-plugin-wasm-pack": "^0.1.9"
+  },
+  "scripts": {
+    "wasm": "wasm-pack build ./sfxr-rs --target web",
+    "dev": "vite",
+    "build": "vite build"
+  }
+}
