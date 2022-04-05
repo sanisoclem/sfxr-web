@@ -8,7 +8,7 @@ init()
     const play_button = document.getElementById('play')
     play_button.addEventListener('click', (_event) => {
       if (fm === null) {
-        fm = new m.FmOsc()
+        fm = new FmOsc()
         fm.set_note(50)
         fm.set_fm_frequency(0)
         fm.set_fm_amount(0)
