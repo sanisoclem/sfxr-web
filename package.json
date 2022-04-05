@@ -4,8 +4,7 @@
   "author": "Jerahmeel Cosinas<me@jerahmeelcosinas.net>",
   "license": "MIT",
   "devDependencies": {
-    "vite": "^2.8.0",
-    "vite-plugin-wasm-pack": "^0.1.9"
+    "vite": "^2.8.0"
   },
   "scripts": {
     "wasm": "wasm-pack build ./sfxr-rs --target web",
