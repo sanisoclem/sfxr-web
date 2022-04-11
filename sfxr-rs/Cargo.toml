@@ -1,12 +1,13 @@
 [package]
-name = "sfxr-rs"
+name = "sfxr-web"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-eframe = "0.17.0" # Gives us egui, epi and web+native backends
 wasm-bindgen = "0.2.79"
-dasp = "0.11.0"
+sfxr = { git = "https://github.com/sanisoclem/sfxr-rs", rev ="ecfd21f" }
+rand = { version = "0.8", features = ["small_rng"]}
+getrandom = { version = "0.2.6", features = ["js"] }
 
 [dependencies.web-sys]
 version = "0.3.4"
@@ -18,11 +19,9 @@ features = [
   'GainNode',
   'OscillatorNode',
   'OscillatorType',
+  'AudioBuffer',
+  'AudioBufferSourceNode'
 ]
-
-[[bin]]
-name = "sfxr-rs-native"
-path = "src/main.rs"
 
 [lib]
 crate-type = ["cdylib", "rlib"]

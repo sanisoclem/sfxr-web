@@ -1,12 +1,12 @@
 {
-  "name": "sfxr-rs",
+  "name": "sfxr-web",
   "version": "0.1.0",
   "files": [
-    "sfxr_rs_bg.wasm",
-    "sfxr_rs.js",
-    "sfxr_rs.d.ts"
+    "sfxr_web_bg.wasm",
+    "sfxr_web.js",
+    "sfxr_web.d.ts"
   ],
-  "module": "sfxr_rs.js",
-  "types": "sfxr_rs.d.ts",
+  "module": "sfxr_web.js",
+  "types": "sfxr_web.d.ts",
   "sideEffects": false
 }
