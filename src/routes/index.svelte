@@ -3,7 +3,7 @@
 </script>
 
 <script lang="ts">
-  import init, { EffectGenerator } from 'sfxr-rs';
+  import init, { EffectGenerator } from 'sfxr-web';
   import { onMount } from 'svelte';
 
   let generator: EffectGenerator;
