@@ -16,6 +16,13 @@ const config = {
 		vite: {
 			optimizeDeps: {
 				exclude: ['marked']
+			},
+			server: {
+				fs: {
+					allow: [
+						"sfxr-rs/pkg"
+					]
+				}
 			}
 		}
 	}
