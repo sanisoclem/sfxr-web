@@ -1,10 +1,17 @@
 const colors = require('tailwindcss/colors');
 
 const config = {
-	mode: 'jit',
-	purge: ['./src/**/*.{html,js,svelte,ts}'],
+	content: ['./src/**/*.{html,js,svelte,ts}'],
 	darkMode: 'class',
-	plugins: []
+	plugins: [],
+	theme: {
+		fontSize: {
+      '2xl': ['40px', {
+        letterSpacing: '.3em',
+				lineHeight: '40px',
+      }],
+    }
+	}
 };
 
 module.exports = config;

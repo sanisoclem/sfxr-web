@@ -4,6 +4,7 @@
 
 <script lang="ts">
   import init, { EffectGenerator } from 'sfxr-web';
+  import Button from '../components/Button.svelte';
   import { onMount } from 'svelte';
 
   let generator: EffectGenerator;
@@ -30,16 +31,16 @@
 	<title>Sound Effect Generator</title>
 </svelte:head>
 
-<div class="text-white bg-gray-900 min-h-screen">
-	<h1>Sound Effect Generator</h1>
-  <div class="mx-auto">
-    <button on:click={mutate} type="button">Mutate</button>
-    <button on:click={randomize("pickup")} type="button">Pickup</button>
-    <button on:click={randomize("laser")} type="button">Laser</button>
-    <button on:click={randomize("explosion")} type="button">Explosion</button>
-    <button on:click={randomize("powerup")} type="button">Powerup</button>
-    <button on:click={randomize("hit")} type="button">Hit</button>
-    <button on:click={randomize("jump")} type="button">Jump</button>
-    <button on:click={randomize("blip")} type="button">Blip</button>
+<div class="text-white bg-gray-900 min-h-screen flex flex-col justify-center items-center">
+	<h1 class="mb-8 text-2xl text-center w-full">Sound Effect Generator</h1>
+  <div class="w-full flex flex-row justify-center gap-4 flex-wrap">
+    <Button on:click={mutate}>Mutate</Button>
+    <Button on:click={randomize("pickup")}>Pickup</Button>
+    <Button on:click={randomize("laser")}>Laser</Button>
+    <Button on:click={randomize("explosion")}>Explosion</Button>
+    <Button on:click={randomize("powerup")}>Powerup</Button>
+    <Button on:click={randomize("hit")}>Hit</Button>
+    <Button on:click={randomize("jump")}>Jump</Button>
+    <Button on:click={randomize("blip")}>Blip</Button>
   </div>
 </div>

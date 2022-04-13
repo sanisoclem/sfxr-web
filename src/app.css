@@ -1,8 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 /* Write your global styles here, in PostCSS syntax */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 body {
-	font-family: 'Montserrat', sans-serif;
+	font-family: 'VT323', monospace;
 }

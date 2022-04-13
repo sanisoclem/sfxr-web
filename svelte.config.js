@@ -20,7 +20,7 @@ const config = {
 			server: {
 				fs: {
 					allow: [
-						"sfxr-rs/pkg"
+						"sfxr-web/pkg"
 					]
 				}
 			}
