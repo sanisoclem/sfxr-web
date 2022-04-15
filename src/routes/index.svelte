@@ -3,33 +3,54 @@
 </script>
 
 <script lang="ts">
-  import init, { EffectGenerator } from 'sfxr-web';
+  import init, { SoundEffectGenerator } from 'sfxr-web';
   import Button from '../components/Button.svelte';
   import Slider from '../components/Slider.svelte';
+  import { LayerCake, Svg } from 'layercake';
+	import Line from '../components/Line.svelte';
   import { onMount } from 'svelte';
 
-  let generator: EffectGenerator;
+  let generator: SoundEffectGenerator;
+  let data = [];
 
   onMount(async () => {
     await init();
-    generator = new EffectGenerator();
+    generator = new SoundEffectGenerator();
   });
 
   const randomize = (name: string) => () => {
     if (!generator) return;
     generator.randomize(name);
+    dump();
   };
 
   function mutate() {
     if (!generator) return;
     generator.mutate();
-    console.log('mutating');
+    dump();
+  }
+
+  function dump() {
+    const result = generator.dump()
+    data = result.raw.map((v, i) => {
+      return {
+        x: i,
+        y: v
+      }
+    });
   }
 </script>
 
 <svelte:head>
   <title>Sound Effect Generator</title>
 </svelte:head>
+
+<style>
+  .chart-container {
+    width: 100%;
+    height: 300px;
+  }
+</style>
 
 <div class="text-white bg-gray-900 min-h-screen flex flex-col justify-center items-center">
   <div class="max-w-screen-lg p-4">
@@ -43,6 +64,14 @@
       <Button on:click={randomize('hit')}>Hit</Button>
       <Button on:click={randomize('jump')}>Jump</Button>
       <Button on:click={randomize('blip')}>Blip</Button>
+      <Button on:click={dump}>Dump</Button>
+    </div>
+    <div class="chart-container">
+      <LayerCake x="x" y="y" yDomain={[-1, 1]} data={data}>
+        <Svg>
+          <Line/>
+        </Svg>
+      </LayerCake>
     </div>
     <div class="my-8 border-2 border-rose-500 p-8 hidden">
       <Slider label="Attack" value={0} units="samples"></Slider>

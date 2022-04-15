@@ -31,7 +31,7 @@
     "typescript": "^4.6.2"
   },
   "scripts": {
-    "wasm": "wasm-pack build ./sfxr-rs --target web",
+    "wasm": "wasm-pack build ./sfxr-web --target web",
     "dev": "svelte-kit dev",
     "build": "svelte-kit build",
     "preview": "svelte-kit preview",
@@ -42,6 +42,7 @@
   },
   "dependencies": {
     "@lukeed/uuid": "^2.0.0",
-    "cookie": "^0.4.1"
+    "cookie": "^0.4.1",
+    "layercake": "^6.1.0"
   }
 }
