@@ -4,21 +4,23 @@ use rand::SeedableRng;
 use wasm_bindgen::prelude::*;
 use web_sys::{AudioContext, AudioBufferSourceNode};
 
+mod sfxr;
+
 #[wasm_bindgen]
-pub struct EffectGenerator {
+pub struct EffectPlayer {
     ctx: AudioContext,
     src: AudioBufferSourceNode,
     sample: sfxr::Sample,
 }
 
 #[wasm_bindgen]
-impl EffectGenerator {
+impl EffectPlayer {
     #[wasm_bindgen(constructor)]
-    pub fn new() -> Result<EffectGenerator, JsValue> {
+    pub fn new() -> Result<EffectPlayer, JsValue> {
         let ctx = web_sys::AudioContext::new()?;
         let src = ctx.create_buffer_source()?;
 
-        Ok(EffectGenerator {
+        Ok(EffectPlayer {
             ctx,
             src,
             sample: sfxr::Sample::pickup(Some(SmallRng::from_entropy().next_u64())),
@@ -70,7 +72,8 @@ impl EffectGenerator {
         self.play()
     }
 }
-impl Drop for EffectGenerator {
+
+impl Drop for EffectPlayer {
     fn drop(&mut self) {
         let _ = self.ctx.close();
     }

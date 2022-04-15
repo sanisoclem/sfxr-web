@@ -5,9 +5,9 @@ edition = "2021"
 
 [dependencies]
 wasm-bindgen = "0.2.79"
-sfxr = { git = "https://github.com/sanisoclem/sfxr-rs", rev ="ecfd21f" }
 rand = { version = "0.8", features = ["small_rng"]}
 getrandom = { version = "0.2.6", features = ["js"] }
+dasp = "0.11.0"
 
 [dependencies.web-sys]
 version = "0.3.4"

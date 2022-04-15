@@ -44,7 +44,7 @@
       <Button on:click={randomize('jump')}>Jump</Button>
       <Button on:click={randomize('blip')}>Blip</Button>
     </div>
-    <div class="my-8 border-2 border-rose-500 p-8">
+    <div class="my-8 border-2 border-rose-500 p-8 hidden">
       <Slider label="Attack" value={0} units="samples"></Slider>
       <Slider label="Sustain" value={0} units="samples"></Slider>
       <Slider label="Sustain Punch" value={0} max="1" step="0.01"></Slider>
