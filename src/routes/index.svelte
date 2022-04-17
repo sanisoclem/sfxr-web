@@ -3,106 +3,18 @@
 </script>
 
 <script lang="ts">
-  import init, { SoundEffectGenerator } from 'sfxr-web';
-  import Button from '../components/Button.svelte';
-  import Slider from '../components/Slider.svelte';
-  import { LayerCake, Svg } from 'layercake';
-	import Line from '../components/Line.svelte';
-  import { onMount } from 'svelte';
-
-  let generator: SoundEffectGenerator;
-  let data = [];
-
-  onMount(async () => {
-    await init();
-    generator = new SoundEffectGenerator();
-  });
-
-  const randomize = (name: string) => () => {
-    if (!generator) return;
-    generator.randomize(name);
-    dump();
-  };
-
-  function mutate() {
-    if (!generator) return;
-    generator.mutate();
-    dump();
-  }
-
-  function dump() {
-    const result = generator.dump()
-    data = result.raw.map((v, i) => {
-      return {
-        x: i,
-        y: v
-      }
-    });
-  }
+  import SoundEffectGenerator from '../components/SoundEffectGenerator.svelte';
 </script>
 
 <svelte:head>
   <title>Sound Effect Generator</title>
 </svelte:head>
 
-<style>
-  .chart-container {
-    width: 100%;
-    height: 300px;
-  }
-</style>
-
 <div class="text-white bg-gray-900 min-h-screen flex flex-col justify-center items-center">
   <div class="max-w-screen-lg p-4">
     <h1 class="mb-8 text-2xl text-center w-full">Sound Effect Generator</h1>
-    <div class="w-full flex flex-row justify-center gap-4 flex-wrap">
-      <Button on:click={mutate}>Mutate</Button>
-      <Button on:click={randomize('pickup')}>Pickup</Button>
-      <Button on:click={randomize('laser')}>Laser</Button>
-      <Button on:click={randomize('explosion')}>Explosion</Button>
-      <Button on:click={randomize('powerup')}>Powerup</Button>
-      <Button on:click={randomize('hit')}>Hit</Button>
-      <Button on:click={randomize('jump')}>Jump</Button>
-      <Button on:click={randomize('blip')}>Blip</Button>
-      <Button on:click={dump}>Dump</Button>
-    </div>
-    <div class="chart-container">
-      <LayerCake x="x" y="y" yDomain={[-1, 1]} data={data}>
-        <Svg>
-          <Line/>
-        </Svg>
-      </LayerCake>
-    </div>
-    <div class="my-8 border-2 border-rose-500 p-8 hidden">
-      <Slider label="Attack" value={0} units="samples"></Slider>
-      <Slider label="Sustain" value={0} units="samples"></Slider>
-      <Slider label="Sustain Punch" value={0} max="1" step="0.01"></Slider>
-      <Slider label="Decay" value={0} units="samples"></Slider>
-
-      <Slider label="Start Frequency" value={0} units="hz"></Slider>
-      <Slider label="Min Frequency" value={0} units="hz"></Slider>
-      <Slider label="Ramp" value={0} min="-1" max="1" step="0.01"></Slider>
-      <Slider label="DRamp" value={0} min="-1" max="1" step="0.01"></Slider>
-
-      <Slider label="Vibrato strength" value={0} max="1" step="0.01"></Slider>
-      <Slider label="Speed" value={0} max="1" step="0.01"></Slider>
-      <Slider label="Delay" value={0} max="1" step="0.01"></Slider>
-
-      <Slider label="Low Pass Filter Resonance" value={0} max="1" step="0.01"></Slider>
-      <Slider label="Frequence" value={0} units="Hz"></Slider>
-      <Slider label="Ramp" value={0} max="1" min="-1" step="0.01"></Slider>
-
-      <Slider label="High Pass Filter Frequency" value={0} units="Hz"></Slider>
-      <Slider label="Ramp" value={0} max="1" min="-1" step="0.01"></Slider>
-
-      <Slider label="Phase Offset" value={0} min="-1" max="1" step="0.01"></Slider>
-      <Slider label="Ramp" value={0} min="-1" max="1" step="0.01"></Slider>
-
-      <Slider label="Repeat Speed" value={0} max="1" step="0.01"></Slider>
-
-      <Slider label="Arpeggio Speed" value={0} max="1" step="0.01"></Slider>
-      <Slider label="Arpeggio Mod" value={0} min="-1" max="1" step="0.01"></Slider>
+    <div class="flex flex-col gap-4">
+      <SoundEffectGenerator />
     </div>
   </div>
 </div>
-
