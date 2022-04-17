@@ -2,23 +2,32 @@ use rand::rngs::SmallRng;
 use rand::RngCore;
 use rand::SeedableRng;
 use wasm_bindgen::prelude::*;
+use serde::{Serialize, Deserialize};
 use web_sys::{AudioContext, AudioBufferSourceNode};
 
+mod sfxr;
+
+#[derive(Serialize, Deserialize)]
+pub struct DumpOutput {
+  pub raw: Vec<f32>
+}
+
 #[wasm_bindgen]
-pub struct EffectGenerator {
+pub struct SoundEffectGenerator {
     ctx: AudioContext,
     src: AudioBufferSourceNode,
     sample: sfxr::Sample,
 }
 
 #[wasm_bindgen]
-impl EffectGenerator {
+impl SoundEffectGenerator {
     #[wasm_bindgen(constructor)]
-    pub fn new() -> Result<EffectGenerator, JsValue> {
+    pub fn new() -> Result<SoundEffectGenerator, JsValue> {
+        console_error_panic_hook::set_once();
         let ctx = web_sys::AudioContext::new()?;
         let src = ctx.create_buffer_source()?;
 
-        Ok(EffectGenerator {
+        Ok(SoundEffectGenerator {
             ctx,
             src,
             sample: sfxr::Sample::pickup(Some(SmallRng::from_entropy().next_u64())),
@@ -69,8 +78,17 @@ impl EffectGenerator {
 
         self.play()
     }
+
+    pub fn dump(&mut self) -> JsValue {
+        let generator = sfxr::Generator::new(self.sample.clone());
+        let output = DumpOutput {
+            raw: generator.into_iter().collect::<Vec<_>>()
+        };
+        JsValue::from_serde(&output).unwrap()
+    }
 }
-impl Drop for EffectGenerator {
+
+impl Drop for SoundEffectGenerator {
     fn drop(&mut self) {
         let _ = self.ctx.close();
     }
