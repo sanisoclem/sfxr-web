@@ -3,14 +3,8 @@
 </script>
 
 <script lang="ts">
-  // import { goto } from '$app/navigation';
-
   import SoundEffectGenerator from '../components/SoundEffectGenerator.svelte';
 
-  // function randomized(e) {
-  //   console.log(e);
-  //   goto(`/${e.detail.shareSeed}`);
-  // }
 </script>
 
 <svelte:head>

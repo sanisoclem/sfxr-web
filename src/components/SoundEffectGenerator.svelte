@@ -5,10 +5,7 @@
   import { LayerCake, Svg } from 'layercake';
   import Line from '../components/Line.svelte';
   import { onMount } from 'svelte';
-  // import { createEventDispatcher } from 'svelte';
   import { afterNavigate, goto } from '$app/navigation';
-
-  // const dispatch = createEventDispatcher();
 
   let generator: SoundEffectGenerator;
   let preset: string | undefined;
@@ -36,7 +33,6 @@
     goto(`/${name.toUpperCase()}-${seed.toString(16).toUpperCase()}`, {
       noscroll: true
     });
-    // dispatch('randomize', { preset: name, seed, shareSeed: `` });
   };
 
   const loadSeed = (name: string, s: BigInt) => {
@@ -82,7 +78,7 @@
 <style>
   .wave-display {
     width: 100%;
-    height: 300px;
+    height: 150px;
   }
 </style>
 
@@ -109,36 +105,6 @@
       <Line />
     </Svg>
   </LayerCake>
-</section>
-<section class="advanced-generator my-8 border-2 border-rose-500 p-8 hidden">
-  <Slider label="Attack" value={0} units="samples" />
-  <Slider label="Sustain" value={0} units="samples" />
-  <Slider label="Sustain Punch" value={0} max="1" step="0.01" />
-  <Slider label="Decay" value={0} units="samples" />
-
-  <Slider label="Start Frequency" value={0} units="hz" />
-  <Slider label="Min Frequency" value={0} units="hz" />
-  <Slider label="Ramp" value={0} min="-1" max="1" step="0.01" />
-  <Slider label="DRamp" value={0} min="-1" max="1" step="0.01" />
-
-  <Slider label="Vibrato strength" value={0} max="1" step="0.01" />
-  <Slider label="Speed" value={0} max="1" step="0.01" />
-  <Slider label="Delay" value={0} max="1" step="0.01" />
-
-  <Slider label="Low Pass Filter Resonance" value={0} max="1" step="0.01" />
-  <Slider label="Frequence" value={0} units="Hz" />
-  <Slider label="Ramp" value={0} max="1" min="-1" step="0.01" />
-
-  <Slider label="High Pass Filter Frequency" value={0} units="Hz" />
-  <Slider label="Ramp" value={0} max="1" min="-1" step="0.01" />
-
-  <Slider label="Phase Offset" value={0} min="-1" max="1" step="0.01" />
-  <Slider label="Ramp" value={0} min="-1" max="1" step="0.01" />
-
-  <Slider label="Repeat Speed" value={0} max="1" step="0.01" />
-
-  <Slider label="Arpeggio Speed" value={0} max="1" step="0.01" />
-  <Slider label="Arpeggio Mod" value={0} min="-1" max="1" step="0.01" />
 </section>
 <section class="presets w-full flex flex-row justify-center gap-4 flex-wrap">
   <Button on:click={randomizePreset('pickup')}>Pickup</Button>
