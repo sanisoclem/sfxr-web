@@ -1,95 +1,85 @@
-use rand::rngs::SmallRng;
-use rand::RngCore;
-use rand::SeedableRng;
+use dasp::Signal;
+use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
-use serde::{Serialize, Deserialize};
-use web_sys::{AudioContext, AudioBufferSourceNode};
+use web_sys::{AudioBufferSourceNode, AudioContext};
+use std::collections::hash_map::DefaultHasher;
+use std::hash::{Hash, Hasher};
 
 mod sfxr;
 
 #[derive(Serialize, Deserialize)]
 pub struct DumpOutput {
-  pub raw: Vec<f32>
+  pub raw: Option<Vec<f32>>,
 }
 
 #[wasm_bindgen]
 pub struct SoundEffectGenerator {
-    ctx: AudioContext,
-    src: AudioBufferSourceNode,
-    sample: sfxr::Sample,
+  ctx: AudioContext,
+  src: AudioBufferSourceNode,
+  params: sfxr::GeneratorParameters,
+  raw_hash: u64,
+  raw: Option<Vec<f32>>,
 }
 
 #[wasm_bindgen]
 impl SoundEffectGenerator {
-    #[wasm_bindgen(constructor)]
-    pub fn new() -> Result<SoundEffectGenerator, JsValue> {
-        console_error_panic_hook::set_once();
-        let ctx = web_sys::AudioContext::new()?;
-        let src = ctx.create_buffer_source()?;
+  #[wasm_bindgen(constructor)]
+  pub fn new() -> Result<SoundEffectGenerator, JsValue> {
+    console_error_panic_hook::set_once();
+    let ctx = web_sys::AudioContext::new()?;
+    let src = ctx.create_buffer_source()?;
 
-        Ok(SoundEffectGenerator {
-            ctx,
-            src,
-            sample: sfxr::Sample::pickup(Some(SmallRng::from_entropy().next_u64())),
-        })
+    Ok(SoundEffectGenerator {
+      ctx,
+      src,
+      params: sfxr::GeneratorParameters::default(),
+      raw_hash: 0,
+      raw: None,
+    })
+  }
+
+  #[wasm_bindgen]
+  pub fn play(&mut self) -> Result<(), JsValue> {
+    let mut hasher = DefaultHasher::new();
+    self.params.hash(&mut hasher);
+    let hash = hasher.finish();
+
+    if hash != self.raw_hash {
+      let signal = sfxr::Generator::from_params(self.params.clone());
+      self.raw = Some(signal.until_exhausted().map(|[a]| a).collect::<Vec<_>>());
+      self.raw_hash = hash;
     }
 
-    #[wasm_bindgen]
-    pub fn play(&mut self) -> Result<(), JsValue> {
-        let generator = sfxr::Generator::new(self.sample.clone());
-        let buffer = generator.into_iter().collect::<Vec<_>>();
-        let sample_rate = self.ctx.sample_rate();
-        let abuffer = self
-            .ctx
-            .create_buffer(1, buffer.len() as u32, sample_rate)?;
-        abuffer.copy_to_channel(&buffer, 0)?;
-        let src = self.ctx.create_buffer_source()?;
+    if let Some(raw) = &self.raw {
+      let sample_rate = self.ctx.sample_rate();
+      let abuffer = self.ctx.create_buffer(1, raw.len() as u32, sample_rate)?;
+      abuffer.copy_to_channel(&raw, 0)?;
+      let src = self.ctx.create_buffer_source()?;
+      src.set_buffer(Some(&abuffer));
+      src.connect_with_audio_node(&self.ctx.destination())?;
+      src.start()?;
 
-        src.set_buffer(Some(&abuffer));
-        src.connect_with_audio_node(&self.ctx.destination())?;
-        src.start()?;
-
-        self.src.disconnect()?;
-        self.src = src;
-
-        Ok(())
+      self.src.disconnect()?;
+      self.src = src;
     }
 
-    #[wasm_bindgen]
-    pub fn mutate(&mut self) -> Result<(), JsValue> {
-        let seed = Some(SmallRng::from_entropy().next_u64());
-        self.sample.mutate(seed);
-        self.play()
-    }
+    Ok(())
+  }
 
-    #[wasm_bindgen]
-    pub fn randomize(&mut self, name: String) -> Result<(), JsValue> {
-        let seed = Some(SmallRng::from_entropy().next_u64());
-        self.sample = match name.as_str() {
-            "pickup" => sfxr::Sample::pickup(seed),
-            "laser" => sfxr::Sample::laser(seed),
-            "explosion" => sfxr::Sample::explosion(seed),
-            "powerup" => sfxr::Sample::powerup(seed),
-            "hit" => sfxr::Sample::hit(seed),
-            "jump" => sfxr::Sample::jump(seed),
-            "blip" => sfxr::Sample::blip(seed),
-            _ => sfxr::Sample::pickup(seed)
-        };
+  #[wasm_bindgen]
+  pub fn preset(&mut self, name: &str, seed: u64) -> Result<(), JsValue> {
+    self.params.random_preset(name, seed);
+    self.play()
+  }
 
-        self.play()
-    }
-
-    pub fn dump(&mut self) -> JsValue {
-        let generator = sfxr::Generator::new(self.sample.clone());
-        let output = DumpOutput {
-            raw: generator.into_iter().collect::<Vec<_>>()
-        };
-        JsValue::from_serde(&output).unwrap()
-    }
+  #[wasm_bindgen]
+  pub fn export_raw(&mut self) -> JsValue {
+    JsValue::from_serde(&self.raw).unwrap()
+  }
 }
 
 impl Drop for SoundEffectGenerator {
-    fn drop(&mut self) {
-        let _ = self.ctx.close();
-    }
+  fn drop(&mut self) {
+    let _ = self.ctx.close();
+  }
 }

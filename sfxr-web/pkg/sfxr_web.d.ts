@@ -11,16 +11,14 @@ export class SoundEffectGenerator {
 */
   play(): void;
 /**
-*/
-  mutate(): void;
-/**
 * @param {string} name
+* @param {BigInt} seed
 */
-  randomize(name: string): void;
+  preset(name: string, seed: BigInt): void;
 /**
 * @returns {any}
 */
-  dump(): any;
+  export_raw(): any;
 }
 
 export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembly.Module;
@@ -30,9 +28,8 @@ export interface InitOutput {
   readonly __wbg_soundeffectgenerator_free: (a: number) => void;
   readonly soundeffectgenerator_new: (a: number) => void;
   readonly soundeffectgenerator_play: (a: number, b: number) => void;
-  readonly soundeffectgenerator_mutate: (a: number, b: number) => void;
-  readonly soundeffectgenerator_randomize: (a: number, b: number, c: number, d: number) => void;
-  readonly soundeffectgenerator_dump: (a: number) => number;
+  readonly soundeffectgenerator_preset: (a: number, b: number, c: number, d: number, e: number, f: number) => void;
+  readonly soundeffectgenerator_export_raw: (a: number) => number;
   readonly __wbindgen_add_to_stack_pointer: (a: number) => number;
   readonly __wbindgen_malloc: (a: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number) => number;
