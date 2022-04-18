@@ -38,7 +38,7 @@
   const loadSeed = (name: string, s: BigInt) => {
     seed = s;
     preset = name;
-    shareSeed = `${name.toUpperCase()}-${s.toString(16)}`;
+    shareSeed = `${name.toUpperCase()}-${s.toString(16).toUpperCase()}`;
 
     if (!generator) return;
     generator.preset(preset, seed);
