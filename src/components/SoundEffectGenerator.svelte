@@ -33,7 +33,9 @@
 
   const randomizePreset = (name: string, s?: BigInt) => () => {
     const seed = s || randomBigInt();
-    goto(`/${name.toUpperCase()}-${seed.toString(16).toUpperCase()}`);
+    goto(`/${name.toUpperCase()}-${seed.toString(16).toUpperCase()}`, {
+      noscroll: true
+    });
     // dispatch('randomize', { preset: name, seed, shareSeed: `` });
   };
 
