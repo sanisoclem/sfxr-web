@@ -12,20 +12,9 @@ const config = {
 	],
 
 	kit: {
-		adapter: adapter(),
-		vite: {
-			optimizeDeps: {
-				exclude: ['marked']
-			},
-			server: {
-				fs: {
-					allow: [
-						"sfxr-web/pkg"
-					]
-				}
-			}
-		}
+		adapter: adapter()
 	}
 };
 
 export default config;
+
