@@ -1,18 +1,16 @@
 <script lang="ts">
-  import logo from '../../assets/logo.svg';
-  import SoundEffectGenerator from '../../components/SoundEffectGenerator.svelte';
+  import { afterNavigate } from '$app/navigation';
+
+  let shareSeed: string | undefined;
+
+  afterNavigate((nav) => {
+    const split = nav.to?.url.pathname.split('/').pop()?.split('-');
+      if (split && split.length === 2) {
+        shareSeed = `${split[0].toUpperCase()}-${BigInt(`0x${split[1]}`).toString(16).toUpperCase()}`
+      }
+  });
 </script>
 
 <svelte:head>
-  <title>Sound Effect Generator</title>
+  <title>{shareSeed} - Sound Effect Generator</title>
 </svelte:head>
-
-<div class="text-white bg-gray-900 min-h-screen flex flex-col justify-center items-center">
-  <div class="w-full max-w-screen-lg p-4 flex justify-center flex-col items-center">
-    <img alt="square wave" class="" src={logo} width="150" height="80" />
-    <h1 class="mb-8 text-2xl text-center w-full">Sound Effect Generator</h1>
-    <div class="flex flex-col gap-4">
-      <SoundEffectGenerator />
-    </div>
-  </div>
-</div>
