@@ -2,7 +2,7 @@
 
 ## Prerequesites
 
- - [node](https://nodejs.org/en/) (tested with 14+) - also see [nvm](https://github.com/nvm-sh/nvm)
+ - [node](https://nodejs.org/en/) (tested with 18+) - also see [nvm](https://github.com/nvm-sh/nvm)
  - [pnpm](https://pnpm.io/) (optional) -
  - rust - see [rustup.rs](https://rustup.rs/)
  - [wasm-pack](https://github.com/rustwasm/wasm-pack)
