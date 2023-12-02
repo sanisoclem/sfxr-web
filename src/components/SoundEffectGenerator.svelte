@@ -1,7 +1,6 @@
 <script lang="ts">
   import init, { SoundEffectGenerator } from 'sfxr-web';
   import Button from '../components/Button.svelte';
-  import Slider from '../components/Slider.svelte';
   import { LayerCake, Svg } from 'layercake';
   import Line from '../components/Line.svelte';
   import { onMount } from 'svelte';
@@ -22,7 +21,7 @@
 
   afterNavigate((nav) => {
     setTimeout(() => {
-      const split = nav.to.pathname.split('/').pop()?.split('-');
+      const split = nav.to?.url.pathname.split('/').pop()?.split('-');
       if (split && split.length === 2) {
         loadSeed(split[0].toLowerCase(), BigInt(`0x${split[1]}`));
       }
@@ -32,7 +31,7 @@
   const randomizePreset = (name: string, s?: bigint) => () => {
     const seed = s || randombigint();
     goto(`/${name.toUpperCase()}-${seed.toString(16).toUpperCase()}`, {
-      noscroll: true
+      noScroll: true
     });
   };
 
