@@ -8,5 +8,7 @@
   ],
   "module": "sfxr_web.js",
   "types": "sfxr_web.d.ts",
-  "sideEffects": false
+  "sideEffects": [
+    "./snippets/*"
+  ]
 }

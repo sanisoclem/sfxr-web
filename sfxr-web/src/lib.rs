@@ -1,9 +1,10 @@
 use dasp::Signal;
 use serde::{Deserialize, Serialize};
-use wasm_bindgen::prelude::*;
-use web_sys::{AudioBufferSourceNode, AudioContext};
 use std::collections::hash_map::DefaultHasher;
 use std::hash::{Hash, Hasher};
+use std::io::{Cursor, Read, Seek, SeekFrom};
+use wasm_bindgen::prelude::*;
+use web_sys::{AudioBufferSourceNode, AudioContext};
 
 mod sfxr;
 
@@ -75,6 +76,26 @@ impl SoundEffectGenerator {
   #[wasm_bindgen]
   pub fn export_raw(&mut self) -> JsValue {
     JsValue::from_serde(&self.raw).unwrap()
+  }
+
+  #[wasm_bindgen]
+  pub fn export_wav(&mut self) -> JsValue {
+    let data = wav::BitDepth::ThirtyTwoFloat(self.raw.clone().unwrap());
+    let mut buf = Cursor::new(Vec::new());
+    wav::write(
+      wav::Header::new(
+        wav::header::WAV_FORMAT_IEEE_FLOAT,
+        1,
+        self.ctx.sample_rate() as u32,
+        32,
+      ),
+      &data,
+      &mut buf,
+    ).expect("im lazy");
+    let mut out = Vec::new();
+    buf.seek(SeekFrom::Start(0)).unwrap();
+    buf.read_to_end(&mut out).unwrap();
+    JsValue::from_serde(&out).unwrap()
   }
 }
 
