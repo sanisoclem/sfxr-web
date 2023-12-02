@@ -28,6 +28,8 @@ pub struct Oscillator {
   arp_limit: i32,
   arp_mod: f64,
 }
+
+
 pub trait Filter {
   fn filter(&mut self, sample: f32) -> Option<f32>;
 }

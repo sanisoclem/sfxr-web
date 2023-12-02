@@ -4,3 +4,4 @@ reorder_impl_items = true
 newline_style = "Unix"
 tab_spaces = 2
 imports_granularity = "Crate"
+edition = "2021"
